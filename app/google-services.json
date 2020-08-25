@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "185280669993",
+    "firebase_url": "https://android-demo-senthil.firebaseio.com",
+    "project_id": "android-demo-senthil",
+    "storage_bucket": "android-demo-senthil.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185280669993:android:9fd89781260796b5",
+        "android_client_info": {
+          "package_name": "com.mytaxi.android_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185280669993-44o78ro7rlvgssnuk1pi7h98r1ahkrft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKWV_l0P6FD5aV1H6Ijc6vjZ67JmfPQio"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

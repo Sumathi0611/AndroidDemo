@@ -1,0 +1,38 @@
+#
+# Build configuration for Circle CI
+#
+# See this thread for speeding up and caching directories: https://discuss.circleci.com/t/installing-android-build-tools-23-0-2/924
+#
+
+#general:
+#    artifacts:
+#        - /home/ubuntu/AndroidCI/app/build/outputs/apk/
+
+#machine:
+#    environment:
+#        ANDROID_HOME: /usr/local/android-sdk-linux
+
+
+dependencies:
+  pre:
+    - chmod +x gradlew
+    - echo y | android update sdk --no-ui --all --filter tools,platform-tools,extra-google-m2repository,extra-google-google_play_services,extra-android-support,android-27
+    - echo y | android update sdk --no-ui --all --filter build-tools-27.0.3
+    - sudo pip install -U crcmod
+  cache_directories:
+    - /usr/local/android-sdk-linux/tools
+    - /usr/local/android-sdk-linux/build-tools/27.0.3
+  post:
+    - ./gradlew :app:assembleDebug -PdisablePreDex
+    - ./gradlew :app:assembleDebugAndroidTest -PdisablePreDex
+    - echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
+    - sudo /opt/google-cloud-sdk/bin/gcloud config set project android-demo-senthil
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+    - sudo /opt/google-cloud-sdk/bin/gcloud --quiet components install beta
+    - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account android-demo-senthil@appspot.gserviceaccount.com --key-file ${HOME}/client-secret.json
+
+test:
+  override:
+    - echo "y" | sudo /opt/google-cloud-sdk/bin/gcloud beta firebase test android run --app app/build/outputs/apk/debug/app-debug.apk --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk --device model=Nexus5X,version=26 #--results-bucket test-lab-03aaqz4ind2b8-yz1at004nu888
+ # post:
+ #   - sudo /opt/google-cloud-sdk/bin/gsutil -m cp -r -U 'sudo /opt/google-cloud-sdk/bin/gsutil ls gs://test-lab-03aaqz4ind2b8-yz1at004nu888 | tail -1' $CIRCLE_ARTIFACTS/ | true
